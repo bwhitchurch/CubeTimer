@@ -4,3 +4,8 @@ project(CubeTimer++ VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_REQUIRE_CXX_STANDARD True)
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
+
+add_subdirectory(app)
