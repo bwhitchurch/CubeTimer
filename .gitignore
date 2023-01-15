@@ -1,3 +1,4 @@
 # Cmake build directory
 build/
 .cache/
+compile_commands.json
