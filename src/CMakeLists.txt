@@ -9,3 +9,7 @@ target_link_libraries(
 
 target_include_directories(
   foo PRIVATE "${CMAKE_BINARY_DIR}/configured_files/include")
+
+if(ENABLE_TESTING)
+  add_subdirectory(test)
+endif()

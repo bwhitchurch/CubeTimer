@@ -4,11 +4,21 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS ON)
 
+set(CMAKE_C_STANDARD 17)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_TEST_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test)
+
 set(ENABLE_DEVELOPER_MODE
     TRUE
     CACHE BOOL "Enable 'develeoper mode'")
 
 set(OPT_WARNINGS_AS_ERRORS_DEVELOPER_DEFAULT TRUE)
+set(BUILD_SHARED_LIBS
+    TRUE
+    CACHE BOOL "Build shared libraries")
 
 include(FetchContent)
 FetchContent_Declare(
@@ -41,10 +51,20 @@ set(CMAKE_CONFIGURATION_TYPES
     CACHE STRING "Enabled
 build types" FORCE)
 
+set(DOXYGEN_EXCLUDE_PATTERNS conanfile.py ${CMAKE_BINARY_DIR}/_deps/*)
+set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
+
+option(ENABLE_COVERAGE "Enable coverage flags" OFF)
+if(ENABLE_COVERAGE)
+  set(ENABLE_COVERAGE "ENABLE_COVERAGE")
+endif()
+
 include(${_project_options_SOURCE_DIR}/src/DynamicProjectOptions.cmake)
 
 dynamic_project_options(
   ENABLE_CONAN
+  ENABLE_DOXYGEN
+  ${ENABLE_COVERAGE}
   CPPCHECK_OPTIONS
   --enable=style,performance,warning,portability
   --inline-suppr
