@@ -2,7 +2,8 @@
 #include <internal_use_only/config.hpp>
 #include <iostream>
 #include <spdlog/spdlog.h>
-void sayHello();
+
+#include "scrambler.hpp"
 
 // NOLINTNEXTLINE(bugprone-excetpion-escape)
 int main(int argc, char** argv) {
@@ -27,8 +28,8 @@ int main(int argc, char** argv) {
 			);
 			return EXIT_SUCCESS;
 		}
-		spdlog::info("Hello World!");
-		sayHello();
+        Scrambler cubeScrambler{};
+        fmt::print("{}\n",cubeScrambler.generate_scramble());
 	} catch (const std::exception& e) {
 		spdlog::error("Unhandled exception in main: {}", e.what());
 	}
