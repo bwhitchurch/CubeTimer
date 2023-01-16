@@ -92,8 +92,8 @@ class Scrambler {
 		  m_dis(0.0, 1.0),
 		  m_state{} {
 		std::array< double, numCubeFaces > stateProb{};
-        stateProb.fill( 1.0 / numCubeFaces );
-		double                             sum = 0.0;
+		stateProb.fill(1.0 / numCubeFaces);
+		double sum = 0.0;
 		for (auto& prob : stateProb) {
 			sum += prob;
 			prob = sum;
@@ -139,6 +139,22 @@ class Scrambler {
 			++moves_generated;
 		}
 		return theScramble.str();
+	}
+
+	static void scramble_stats(
+		const std::string&                             scramble,
+		std::array< size_t, numCubeFaces * numTurns >& stats
+	) {
+		std::stringstream scrambleStream(scramble);
+		std::string       move;
+		while (std::getline(scrambleStream, move, ' ')) {
+			const CubeFace face = cubeFaceNotation[move[0]];
+			const FaceTurn turn = turnNotation[move[1]];
+			++stats.at(
+				numTurns * static_cast< size_t >(face)
+				+ static_cast< size_t >(turn)
+			);
+		}
 	}
 };
 
