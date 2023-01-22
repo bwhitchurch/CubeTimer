@@ -1,60 +1,17 @@
 #ifndef SCRAMBLER_HPP
 #define SCRAMBLER_HPP
 
-#include "enum.hpp"
+#include "cube.hpp"  // for numCubeFaces, CubeFace (ptr only), turnNotation
+#include "enum.hpp"  // for BiEnum
 
-#include <algorithm>
-#include <array>
-#include <cstdlib>
-#include <iostream>
-#include <random>
-#include <string_view>
-#include <utility>
+#include <algorithm> // for fill_n
+#include <array>     // for array
+#include <cstdlib>   // for size_t
+#include <iostream>  // for operator<<, basic_ostream, stringstream, basic_...
+#include <random>    // for mt19937, uniform_real_distribution, random_device
+#include <string>    // for char_traits, allocator, string, getline
 
 #include <sstream>
-
-constexpr size_t numCubeFaces = 6;
-enum class CubeFace { UP, DOWN, RIGHT, LEFT, FRONT, BACK };
-constexpr BiEnum< CubeFace, char, numCubeFaces > cubeFaceNotation{
-	{{{CubeFace::UP, 'U'},
-      {CubeFace::DOWN, 'D'},
-      {CubeFace::RIGHT, 'R'},
-      {CubeFace::LEFT, 'L'},
-      {CubeFace::FRONT, 'F'},
-      {CubeFace::BACK, 'B'}}}};
-
-constexpr size_t numTurns = 3;
-enum class FaceTurn { ANTICLOCKWISE, CLOCKWISE, HALFTURN };
-constexpr BiEnum< FaceTurn, char, numTurns > turnNotation{
-	{{{FaceTurn::ANTICLOCKWISE, '\''},
-      {FaceTurn::CLOCKWISE, '\0'},
-      {FaceTurn::HALFTURN, '2'}}}};
-
-constexpr std::array< std::pair< CubeFace, CubeFace >, numCubeFaces >
-	cubeFaceAxisPair{
-		{{CubeFace::UP, CubeFace::DOWN},
-         {CubeFace::DOWN, CubeFace::UP},
-         {CubeFace::RIGHT, CubeFace::LEFT},
-         {CubeFace::LEFT, CubeFace::RIGHT},
-         {CubeFace::FRONT, CubeFace::BACK},
-         {CubeFace::BACK, CubeFace::FRONT}}
-};
-
-constexpr CubeFace axisPartner(const CubeFace& face) {
-	const auto* found = std::find_if(
-		cubeFaceAxisPair.begin(),
-		cubeFaceAxisPair.end(),
-		[face](const auto& itVal) { return itVal.first == face; }
-	);
-	return found->second;
-}
-
-static_assert(axisPartner(CubeFace::UP) == CubeFace::DOWN);
-static_assert(axisPartner(CubeFace::DOWN) == CubeFace::UP);
-static_assert(axisPartner(CubeFace::RIGHT) == CubeFace::LEFT);
-static_assert(axisPartner(CubeFace::LEFT) == CubeFace::RIGHT);
-static_assert(axisPartner(CubeFace::FRONT) == CubeFace::BACK);
-static_assert(axisPartner(CubeFace::BACK) == CubeFace::FRONT);
 
 constexpr size_t default_scramble_length = 25;
 
@@ -66,7 +23,7 @@ class Scrambler {
 
 	std::array< double, numCubeFaces > computeTransitionProbs() {
 		std::array< double, numCubeFaces > transitionProbs{};
-		if (axisPartner(m_state[0]) != m_state[1]) {
+		if (cubeFaceAxisPair[m_state[0]] != m_state[1]) {
 			transitionProbs.fill(1.0 / (numCubeFaces - 1));
 			transitionProbs.at(static_cast< size_t >(m_state[1])) = 0.0;
 		} else {
@@ -117,7 +74,7 @@ class Scrambler {
 
 	std::string generate_scramble() {
 		size_t            moves_generated = 0;
-		std::stringstream theScramble;
+		std::stringstream theScramble{""};
 		while (moves_generated < m_length) {
 			if (moves_generated > 0) { theScramble << " "; }
 			auto   probTable = computeTransitionProbs();

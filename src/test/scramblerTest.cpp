@@ -1,7 +1,7 @@
-#include "catch2/catch_test_macros.hpp"
-#include "enum.hpp"
+#include <string_view>                   // for string_view, operator==, bas...
 
-#include <string>
+#include "catch2/catch_test_macros.hpp"  // for operator==, AssertionHandler
+#include "enum.hpp"                      // for BiEnum
 
 enum class TestEnum { RED = 42, BLUE = 2, YELLOW, GREEN, PURPLE };
 constexpr BiEnum< TestEnum, std::string_view, 5 > colorNames{

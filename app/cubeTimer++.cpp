@@ -1,18 +1,23 @@
-#include "scrambler.hpp"
+#include "cube.hpp"                     // for numTurns, numCubeFaces, Cube...
+#include "cubeStates.hpp"               // for CubeSymmetry, X_CCW, Y_CCW
+#include "enum.hpp"                     // for BiEnum
+#include "scrambler.hpp"                // for Scrambler
 
+#include <CLI/App.hpp>                  // for App, CLI11_PARSE
 #include <CLI/CLI.hpp>
-#include <cmath>
-#include <cstdio>
-#include <internal_use_only/config.hpp>
-#include <iomanip>
-#include <iostream>
-#include <random>
-#include <spdlog/spdlog.h>
-#include <stdio.h>
-#include <sys/ioctl.h>
-#include <termios.h>
-#include <unistd.h>
-#include <unordered_set>
+#include <algorithm>                    // for fill_n
+#include <array>                        // for array
+#include <cstdio>                       // for size_t, setbuf, NULL, stdin
+#include <cstdlib>                      // for EXIT_SUCCESS
+#include <exception>                    // for exception
+#include <fmt/core.h>                   // for print, basic_string_view
+#include <internal_use_only/config.hpp> // for project_name, project_version
+#include <memory>                       // for allocator
+#include <spdlog/spdlog.h>              // for error, info
+#include <stdexcept>                    // for invalid_argument, out_of_range
+#include <string_view>                  // for basic_string_view
+#include <sys/ioctl.h>                  // for ioctl, FIONREAD
+#include <termios.h>                    // for tcgetattr, tcsetattr, termios
 
 int kbhit() {
 	static bool      initflag = false;
@@ -32,7 +37,7 @@ int kbhit() {
 	return nbbytes;
 }
 
-// NOLINTNEXTLINE(bugprone-excetpion-escape)
+// NOLINTNEXTLINE(bugprone-exception-escape)
 int main(int argc, char** argv) {
 	try {
 		CLI::App app{fmt::format(
@@ -56,9 +61,9 @@ int main(int argc, char** argv) {
 			);
 			return EXIT_SUCCESS;
 		}
-		Scrambler        cubeScrambler{};
-		constexpr size_t max_num_scrambles            = 5;
-		size_t           numScramblesTested           = 0;
+		Scrambler                                     cubeScrambler{};
+		constexpr size_t                              max_num_scrambles  = 5;
+		size_t                                        numScramblesTested = 0;
 		std::array< size_t, numCubeFaces * numTurns > stats{};
 		stats.fill(0);
 		while (numScramblesTested < max_num_scrambles) {
@@ -81,6 +86,20 @@ int main(int argc, char** argv) {
 				);
 			}
 		}
+
+		CubeSymmetry myState = Identity;
+		fmt::print("{}\n", myState);
+		fmt::print("{}\n", myState & X_CCW);
+		fmt::print("{}\n", myState & (2 * X_CCW));
+
+		CubeSymmetry X_CW = -X_CCW;
+		fmt::print("{}\n", (X_CW & X_CCW) == Identity);
+
+		fmt::print("{}\n", (-X_CCW & Y_CCW & X_CCW) == Z_CCW);
+		CubeSymmetry myX = -Y_CCW & Z_CCW & Y_CCW;
+		fmt::print("{}\n", myX == X_CCW);
+		CubeSymmetry myY = -Z_CCW & X_CCW & Z_CCW;
+		fmt::print("{}\n", myY == Y_CCW);
 
 		/*	do {
 		        while (kbhit() == 0) {}

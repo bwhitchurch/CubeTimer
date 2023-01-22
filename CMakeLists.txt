@@ -72,6 +72,7 @@ dynamic_project_options(
   ENABLE_CONAN
   ENABLE_DOXYGEN
   ${ENABLE_COVERAGE}
+  ENABLE_INCLUDE_WHAT_YOU_USE
   CPPCHECK_OPTIONS
   --enable=style,performance,warning,portability
   --inline-suppr
@@ -81,6 +82,10 @@ dynamic_project_options(
   --suppress=passedByValue
   --suppress=syntaxError
   --inconclusive)
+
+set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
+    "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE};-w;-Xiwyu;--check_also=${CMAKE_SOURCE_DIR}/\*.hpp"
+)
 
 target_compile_features(project_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 add_library(CubeTimer++::project_options INTERFACE IMPORTED)
