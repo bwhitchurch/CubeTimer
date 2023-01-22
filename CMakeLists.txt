@@ -84,8 +84,12 @@ dynamic_project_options(
   --inconclusive)
 
 set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
-    "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE};-w;-Xiwyu;--check_also=${CMAKE_SOURCE_DIR}/\*.hpp"
-)
+    "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}"
+    "-w"
+    "-Xiwyu;--mapping-file=${CMAKE_SOURCE_DIR}/project_mappings.imp"
+    "-Xiwyu;--check_also=${CMAKE_SOURCE_DIR}/\*.hpp"
+    "-Xiwyu;quoted_includes_first"
+    "-Xiwyu;--cxx17ns")
 
 target_compile_features(project_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 add_library(CubeTimer++::project_options INTERFACE IMPORTED)
@@ -100,6 +104,11 @@ option(ENABLE_FUZZING "Enable fuzz tests" OFF)
 if(ENABLE_FUZZING)
 
 endif()
+
+find_package(fmt CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(CLI11 CONFIG REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
 
 add_subdirectory(configured_files)
 

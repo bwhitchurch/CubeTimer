@@ -1,0 +1,4 @@
+[
+    { symbol: "std::stringstream", "private", "<sstream>", public }
+]
+

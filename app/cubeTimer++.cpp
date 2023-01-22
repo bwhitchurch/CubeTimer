@@ -1,116 +1,129 @@
-#include "cube.hpp"                     // for numTurns, numCubeFaces, Cube...
-#include "cubeStates.hpp"               // for CubeSymmetry, X_CCW, Y_CCW
-#include "enum.hpp"                     // for BiEnum
 #include "scrambler.hpp"                // for Scrambler
 
-#include <CLI/App.hpp>                  // for App, CLI11_PARSE
-#include <CLI/CLI.hpp>
-#include <algorithm>                    // for fill_n
-#include <array>                        // for array
-#include <cstdio>                       // for size_t, setbuf, NULL, stdin
+#include "internal_use_only/config.hpp" // for project_name, project_version
+
+#include <cstdio>                       // for fileno, stdin, getchar
 #include <cstdlib>                      // for EXIT_SUCCESS
 #include <exception>                    // for exception
-#include <fmt/core.h>                   // for print, basic_string_view
-#include <internal_use_only/config.hpp> // for project_name, project_version
-#include <memory>                       // for allocator
-#include <spdlog/spdlog.h>              // for error, info
 #include <stdexcept>                    // for invalid_argument, out_of_range
+#include <string>                       // for allocator, basic_string
 #include <string_view>                  // for basic_string_view
-#include <sys/ioctl.h>                  // for ioctl, FIONREAD
-#include <termios.h>                    // for tcgetattr, tcsetattr, termios
+#include <termios.h>                    // for tcsetattr, termios, tcgetattr
+
+#include <sys/select.h>                 // for select, time_t, FD_SET, FD_ZERO
+#include <sys/types.h>                  // for uint
+
+#include <fmt/core.h>                   // for format, print, basic_string_...
+
+#include <spdlog/spdlog.h>              // for error
+
+#include <CLI/App.hpp>                  // for App, CLI11_PARSE
+#include <CLI/Config.hpp>               // IWYU pragma: keep
+#include <CLI/Formatter.hpp>            // IWYU pragma: keep
+
+constexpr int key_escape = 27;
+
+termios initUnbufferedStdin() {
+    struct termios old_settings {};
+
+    struct termios new_settings {};
+
+    tcgetattr(fileno(stdin), &old_settings);
+    new_settings = old_settings;
+    new_settings.c_lflag &= ~uint(ICANON) & ~uint(ECHO);
+    tcsetattr(fileno(stdin), TCSANOW, &new_settings);
+    return old_settings;
+}
 
 int kbhit() {
-	static bool      initflag = false;
-	static const int STDIN    = 0;
-
-	if (!initflag) {
-		struct termios term;
-		tcgetattr(STDIN, &term);
-		term.c_lflag &= ~ICANON;
-		tcsetattr(STDIN, TCSANOW, &term);
-		setbuf(stdin, NULL);
-		initflag = true;
-	}
-
-	int nbbytes;
-	ioctl(STDIN, FIONREAD, &nbbytes);
-	return nbbytes;
+    constexpr time_t timeout_secs  = 10;
+    constexpr time_t timeoun_usecs = 0;
+    fd_set           read_set{};
+    FD_ZERO(&read_set);
+    FD_SET(fileno(stdin), &read_set);
+    timeval timeout{timeout_secs, timeoun_usecs};
+    return select(fileno(stdin) + 1, &read_set, nullptr, nullptr, &timeout);
 }
 
 // NOLINTNEXTLINE(bugprone-exception-escape)
 int main(int argc, char** argv) {
-	try {
-		CLI::App app{fmt::format(
-			"{} version {}",
-			cubetimer::cmake::project_name,
-			cubetimer::cmake::project_version
-		)};
-		bool     print_version = false;
-		app.add_flag(
-			"--version", print_version, "Print version information and exit."
-		);
+    try {
+        CLI::App app{fmt::format(
+            "{} version {}",
+            cubetimer::cmake::project_name,
+            cubetimer::cmake::project_version
+        )};
+        bool     print_version = false;
+        app.add_flag(
+            "--version", print_version, "Print version information and exit."
+        );
 
-		CLI11_PARSE(app, argc, argv);
+        CLI11_PARSE(app, argc, argv);
 
-		if (print_version) {
-			fmt::print(
-				"{} version {}\nCompiled from: {}",
-				cubetimer::cmake::project_name,
-				cubetimer::cmake::project_version,
-				cubetimer::cmake::git_sha
-			);
-			return EXIT_SUCCESS;
-		}
-		Scrambler                                     cubeScrambler{};
-		constexpr size_t                              max_num_scrambles  = 5;
-		size_t                                        numScramblesTested = 0;
-		std::array< size_t, numCubeFaces * numTurns > stats{};
-		stats.fill(0);
-		while (numScramblesTested < max_num_scrambles) {
-			if (numScramblesTested % 100000 == 0) {
-				spdlog::info("{} scrambles tested", numScramblesTested);
-			}
-			Scrambler::scramble_stats(cubeScrambler.generate_scramble(), stats);
-			++numScramblesTested;
-		}
+        if (print_version) {
+            fmt::print(
+                "{} version {}\nCompiled from: {}",
+                cubetimer::cmake::project_name,
+                cubetimer::cmake::project_version,
+                cubetimer::cmake::git_sha
+            );
+            return EXIT_SUCCESS;
+        }
+        Scrambler cube_scrambler{};
+        /*
+        constexpr size_t max_num_scrambles    = 5;
+        size_t           num_scrambles_tested = 0;
+        std::array< size_t, num_cube_faces * num_turns > stats{};
+        stats.fill(0);
+        while (num_scrambles_tested < max_num_scrambles) {
+            if (num_scrambles_tested % 100000 == 0) {
+                spdlog::info("{} scrambles tested", num_scrambles_tested);
+            }
+            Scrambler::scrambleStats(cube_scrambler.generateScramble(), stats);
+            ++num_scrambles_tested;
+        }
 
-		fmt::print("Scramble stats:\n");
-		for (size_t i = 0; i < numCubeFaces; ++i) {
-			const char faceNote = cubeFaceNotation[CubeFace(i)];
-			for (size_t j = 0; j < numTurns; ++j) {
-				const char turnNote = (FaceTurn(j) == FaceTurn::CLOCKWISE)
-				                        ? ' '
-				                        : turnNotation[FaceTurn(j)];
-				fmt::print(
-					"{}{}: {}\n", faceNote, turnNote, stats.at(i * numTurns + j)
-				);
-			}
-		}
+        fmt::print("Scramble stats:\n");
+        for (size_t i = 0; i < num_cube_faces; ++i) {
+            const char face_note = cube_face_notation[CubeFace(i)];
+            for (size_t j = 0; j < num_turns; ++j) {
+                const char turn_note = (FaceTurn(j) == FaceTurn::CLOCKWISE)
+                                         ? ' '
+                                         : turn_notation[FaceTurn(j)];
+                fmt::print(
+                    "{}{}: {}\n",
+                    face_note,
+                    turn_note,
+                    stats.at(i * num_turns + j)
+                );
+            }
+        }
 
-		CubeSymmetry myState = Identity;
-		fmt::print("{}\n", myState);
-		fmt::print("{}\n", myState & X_CCW);
-		fmt::print("{}\n", myState & (2 * X_CCW));
+        CubeSymmetry my_state = identity;
+        fmt::print("{}\n", my_state);
+        fmt::print("{}\n", my_state & x_ccw);
+        fmt::print("{}\n", my_state & (2 * x_ccw));
 
-		CubeSymmetry X_CW = -X_CCW;
-		fmt::print("{}\n", (X_CW & X_CCW) == Identity);
+        const CubeSymmetry x_cw = -x_ccw;
+        fmt::print("{}\n", (x_cw & x_ccw) == identity);
 
-		fmt::print("{}\n", (-X_CCW & Y_CCW & X_CCW) == Z_CCW);
-		CubeSymmetry myX = -Y_CCW & Z_CCW & Y_CCW;
-		fmt::print("{}\n", myX == X_CCW);
-		CubeSymmetry myY = -Z_CCW & X_CCW & Z_CCW;
-		fmt::print("{}\n", myY == Y_CCW);
+        fmt::print("{}\n", (-x_ccw & y_ccw & x_ccw) == z_ccw);
+        const CubeSymmetry my_x = -y_ccw & z_ccw & y_ccw;
+        fmt::print("{}\n", my_x == x_ccw);
+        const CubeSymmetry my_y = -z_ccw & x_ccw & z_ccw;
+        fmt::print("{}\n", my_y == y_ccw);
+*/
+        const termios old_settings = initUnbufferedStdin();
+        while (true) {
+            while (kbhit() == 0) {}
+            const int key_press = std::getchar();
+            if (key_press == key_escape) { break; }
 
-		/*	do {
-		        while (kbhit() == 0) {}
-		        const char key_press = std::getchar();
-		        if (key_press == 27) { break; }
-
-		        fmt::print("{}\n", cubeScrambler.generate_scramble());
-		    } while(true);
-		    */
-	} catch (const std::exception& e) {
-		spdlog::error("Unhandled exception in main: {}", e.what());
-	}
-	return EXIT_SUCCESS;
+            fmt::print("{}\n", cube_scrambler.generateScramble());
+        }
+        tcsetattr(fileno(stdin), TCSANOW, &old_settings);
+    } catch (const std::exception& e) {
+        spdlog::error("Unhandled exception in main: {}", e.what());
+    }
+    return EXIT_SUCCESS;
 }
