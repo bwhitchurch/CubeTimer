@@ -32,7 +32,7 @@ include(${_project_options_SOURCE_DIR}/Index.cmake)
 
 project(
   CubeTimer++
-  VERSION 0.0.1
+  VERSION 0.1.0
   DESCRIPTION "A rubik's cube timer and scrambler app"
   HOMEPAGE_URL "https://github.com/bwhitchurch/cubeTimer"
   LANGUAGES CXX C)

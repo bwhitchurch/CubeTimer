@@ -4,11 +4,15 @@
 
 ## New Features
 
-- add: changelog file [`0f07ffa`](https://github.com/bwhitchurch/CubeTimer/commit/0f07ffa47052060558146b0f9489b2dc8b3b7173)
+- add: changelog file [`c509fb5`](https://github.com/bwhitchurch/CubeTimer/commit/c509fb5d43dbb69b4d3320a10fb44701b9021bfb)
 
 ## Fixes
 
 - fix: scrambler no longer generates invalid states. [`8fec1f2`](https://github.com/bwhitchurch/CubeTimer/commit/8fec1f21fa42cfb7d4a586743f06d422125916b4)
+
+## Minor Changes
+
+- dev: bump version number [`ce1f4f7`](https://github.com/bwhitchurch/CubeTimer/commit/ce1f4f7170aa8a59cb32db1eb51ffb6808c2f2d8)
 
 ## Miscellaneous
 
