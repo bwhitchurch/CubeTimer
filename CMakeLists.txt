@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.23)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -66,13 +66,22 @@ if(ENABLE_COVERAGE)
   set(ENABLE_COVERAGE "ENABLE_COVERAGE")
 endif()
 
+option(ENABLE_DOXYGEN "Build the doxygen documentation" OFF)
+if(ENABLE_DOXYGEN)
+  set(ENABLE_DOXYGEN "ENABLE_DOXYGEN")
+endif()
+
+option(ENABLE_INCLUDE_WHAT_YOU_USE "Enable iwyu parsing of #includes" OFF)
+if(ENABLE_INCLUDE_WHAT_YOU_USE)
+  set(ENABLE_INCLUDE_WHAT_YOU_USE "ENABLE_INCLUDE_WHAT_YOU_USE")
+endif()
 include(${_project_options_SOURCE_DIR}/src/DynamicProjectOptions.cmake)
 
 dynamic_project_options(
   ENABLE_CONAN
-  ENABLE_DOXYGEN
+  ${ENABLE_DOXYGEN}
   ${ENABLE_COVERAGE}
-  ENABLE_INCLUDE_WHAT_YOU_USE
+  ${ENABLE_INCLUDE_WHAT_YOU_USE}
   CPPCHECK_OPTIONS
   --enable=style,performance,warning,portability
   --inline-suppr
@@ -83,13 +92,15 @@ dynamic_project_options(
   --suppress=syntaxError
   --inconclusive)
 
-set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
-    "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}"
-    "-w"
-    "-Xiwyu;--mapping-file=${CMAKE_SOURCE_DIR}/project_mappings.imp"
-    "-Xiwyu;--check_also=${CMAKE_SOURCE_DIR}/\*.hpp"
-    "-Xiwyu;quoted_includes_first"
-    "-Xiwyu;--cxx17ns")
+if(ENABLE_INCLUDE_WHAT_YOU_USE)
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
+      "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}"
+      "-w"
+      "-Xiwyu;--mapping-file=${CMAKE_SOURCE_DIR}/project_mappings.imp"
+      "-Xiwyu;--check_also=${CMAKE_SOURCE_DIR}/\*.hpp"
+      "-Xiwyu;quoted_includes_first"
+      "-Xiwyu;--cxx17ns")
+endif()
 
 target_compile_features(project_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
 add_library(CubeTimer++::project_options INTERFACE IMPORTED)
@@ -115,3 +126,4 @@ add_subdirectory(configured_files)
 add_subdirectory(src)
 
 add_subdirectory(app)
+include(CPack)

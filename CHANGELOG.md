@@ -1,10 +1,20 @@
 # Changelog
 
-#[Unreleased](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...HEAD)
+#[Unreleased](https://github.com/bwhitchurch/CubeTimer/compare/0.1.1...HEAD)
+
+## New Features
+
+- Add: build and test github action [`ac98403`](https://github.com/bwhitchurch/CubeTimer/commit/ac984032ecd34f166fa4daeb47b088a665c1988d)
+
+#[0.1.1](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...0.1.1)
+
+## Minor Changes
+
+- dev: some basic ci [`1e0144c`](https://github.com/bwhitchurch/CubeTimer/commit/1e0144c4ac507562ecf74936b0c693b9fa73d0b3)
 
 ## Miscellaneous
 
-- Added a devcontainer [`55af659`](https://github.com/bwhitchurch/CubeTimer/commit/55af659073f1ab9c36ee0bf8c89a25685ca2c6ce)
+- Added a devcontainer [`d385ae1`](https://github.com/bwhitchurch/CubeTimer/commit/d385ae1286ea190dca818ad0048f5a6c7fc1a8f2)
 #[0.1.0]()
 
 ## New Features
