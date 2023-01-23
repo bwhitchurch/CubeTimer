@@ -1,6 +1,11 @@
 # Changelog
 
-#[Unreleased]()
+#[Unreleased](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...HEAD)
+
+## Miscellaneous
+
+- Added a devcontainer [`55af659`](https://github.com/bwhitchurch/CubeTimer/commit/55af659073f1ab9c36ee0bf8c89a25685ca2c6ce)
+#[0.1.0]()
 
 ## New Features
 
@@ -12,7 +17,7 @@
 
 ## Minor Changes
 
-- dev: bump version number [`ce1f4f7`](https://github.com/bwhitchurch/CubeTimer/commit/ce1f4f7170aa8a59cb32db1eb51ffb6808c2f2d8)
+- dev: bump version number [`96c04e2`](https://github.com/bwhitchurch/CubeTimer/commit/96c04e22854909f6f4540728f23f8523025bf748)
 
 ## Miscellaneous
 
