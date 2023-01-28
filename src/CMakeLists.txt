@@ -1,3 +1,4 @@
+add_subdirectory(EnumUtils)
 add_library(scrambler scrambler.cpp)
 target_include_directories(scrambler PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(scrambler PROPERTIES PUBLIC_HEADER

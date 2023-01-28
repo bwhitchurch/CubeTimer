@@ -1,6 +1,11 @@
 # Changelog
 
-#[Unreleased](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...HEAD)
+#[Unreleased](https://github.com/bwhitchurch/CubeTimer/compare/0.1.1...HEAD)
+
+## Miscellaneous
+
+- Enum things [`6575b6f`](https://github.com/bwhitchurch/CubeTimer/commit/6575b6f0c5b04ebe01838fb01754597988a7ae30)
+#[0.1.1](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...0.1.1)
 
 ## New Features
 
@@ -8,7 +13,7 @@
 
 ## Minor Changes
 
-- dev: some basic ci [`8573379`](https://github.com/bwhitchurch/CubeTimer/commit/8573379353ac600f34d8fe38a4d46ab47479b7aa)
+- dev: some basic ci [`adde650`](https://github.com/bwhitchurch/CubeTimer/commit/adde6502800a7ca5425df555e5ffed572a7dab2f)
 
 ## Miscellaneous
 
