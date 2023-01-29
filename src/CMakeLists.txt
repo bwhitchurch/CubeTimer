@@ -1,9 +1,9 @@
 add_subdirectory(ppUtils)
 add_subdirectory(EnumUtils)
-add_library(scrambler scrambler.cpp)
+add_library(scrambler scrambler.cpp cube.cpp)
 target_include_directories(scrambler PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(scrambler PROPERTIES PUBLIC_HEADER
-                                           "scrambler.hpp;enum.hpp")
+                                           "scrambler.hpp;cube.cpp")
 target_link_libraries(
   scrambler
   PRIVATE project_options project_warnings

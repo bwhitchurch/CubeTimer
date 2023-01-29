@@ -132,4 +132,5 @@ template <> struct fmt::formatter< CubeMove > {
     }
 };
 
+const std::unordered_map< CubeFace, CubeFace >& getAxisPairs(); 
 #endif

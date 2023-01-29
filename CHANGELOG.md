@@ -10,7 +10,8 @@
 
 - Change: cube header makes use of enum utils. [`9b0f1a6`](https://github.com/bwhitchurch/CubeTimer/commit/9b0f1a644d1720c5d9cd796d8867fd476183e103)
 - Enum things [`8320a5e`](https://github.com/bwhitchurch/CubeTimer/commit/8320a5ee7d8ffa4e60959c8de8ed9dcadecc7703)
-- enum.hpp is dead [`a0a1dfd`](https://github.com/bwhitchurch/CubeTimer/commit/a0a1dfdeb5326133ed342c8aaafaae6f0aa1fc3c)
+- Change: Finished reworking scrambler to use new enum and cubeMove classes [`6d0e635`](https://github.com/bwhitchurch/CubeTimer/commit/6d0e6356285ba1b035ebd595113021fc8325caca)
+- enum.hpp is dead [`f268ef2`](https://github.com/bwhitchurch/CubeTimer/commit/f268ef27d5541603acb786a228f410548e4e52f0)
 #[0.1.1](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...0.1.1)
 
 ## New Features
