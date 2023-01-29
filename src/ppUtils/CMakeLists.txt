@@ -1,0 +1,7 @@
+add_library(ppUtils INTERFACE)
+target_include_directories(ppUtils INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(ppUtils INTERFACE project_options project_warnings)
+set_target_properties(ppUtils PROPERTIES PUBLIC_HEADER ppUtils.hpp)
+if(ENABLE_TESTING)
+  add_subdirectory(test)
+endif()

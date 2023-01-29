@@ -1,34 +1,28 @@
 #include "enumUtils.hpp"
 
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Reflective Enum Creation") {}
+TEST_CASE("ENUM MACROS") {
+    MAKE_ENUM(Color, int, RED, GREEN, BLUE = 3, ORANGE)
 
-TEST_CASE("Make Enum"){
-    MAKE_ENUM(Color, int, YELLOW, ORANGE = 7, BLACK, GREY);
-    Color my_color = Color::YELLOW;
-    CHECK(my_color != Color::BLACK);
+    MAKE_NAMES(Color, Color, RED, GREEN, BLUE = 3, ORANGE)
+    fmt::print("{}\n", Color_names);
+    CHECK(Color_names[0] == "RED");
+
+    MAKE_VALUES(Color, Color, RED, GREEN, BLUE = 3, ORANGE)
+    CHECK(Color_values[0] == RED);
 }
 
-TEST_CASE("Reflective Enum Use") {
-    enum class Color {
-        RED,
-        BLUE,
-        GREEN = 42,
-        PURPLE,
-    };
+BETTER_ENUM(Color, int, RED, GREEN, ORANGE = 7, YELLOW)
 
-    const ReflectiveEnum< Color > color_helper{
-        {{Color::RED, "red"},
-         {Color::BLUE, "blue"},
-         {Color::GREEN, "green"},
-         {Color::PURPLE, "purple"}}
-    };
-
-    CHECK(color_helper[Color::RED] == "red");
-    CHECK(color_helper["blue"] == Color::BLUE);
-
-    for (auto color : color_helper) { fmt::print("{}\n", color_helper[color]); }
+TEST_CASE("BETTER_ENUM") {
+    CHECK(Color::values()[0] == Color::RED);
+    fmt::print("{}\n", Color::name());
+    fmt::print("{}\n", Color::names());
+    fmt::print("{}\n", Color::values());
+    fmt::print("{}\n", Color::from_string("ORANGE"));
+    fmt::print("{}\n", (+Color::RED).to_string());
 }

@@ -90,6 +90,9 @@ dynamic_project_options(
   --suppress=unmatchedSuppression
   --suppress=passedByValue
   --suppress=syntaxError
+  --suppress=duplicateExpression
+  --suppress=knownConditionTrueFalse
+  --suppress=preprocessorErrorDirective
   --inconclusive)
 
 if(ENABLE_INCLUDE_WHAT_YOU_USE)
