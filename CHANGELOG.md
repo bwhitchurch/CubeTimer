@@ -8,8 +8,9 @@
 
 ## Miscellaneous
 
-- Change: cube header makes use of enum utils. [`a2d456a`](https://github.com/bwhitchurch/CubeTimer/commit/a2d456a07469672d11545c4e1d312ee4434b995a)
+- Change: cube header makes use of enum utils. [`9b0f1a6`](https://github.com/bwhitchurch/CubeTimer/commit/9b0f1a644d1720c5d9cd796d8867fd476183e103)
 - Enum things [`8320a5e`](https://github.com/bwhitchurch/CubeTimer/commit/8320a5ee7d8ffa4e60959c8de8ed9dcadecc7703)
+- enum.hpp is dead [`a0a1dfd`](https://github.com/bwhitchurch/CubeTimer/commit/a0a1dfdeb5326133ed342c8aaafaae6f0aa1fc3c)
 #[0.1.1](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...0.1.1)
 
 ## New Features
