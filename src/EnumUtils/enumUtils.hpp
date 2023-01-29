@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <array>
 #include <string_view>
+#include <functional>
 using namespace std::string_view_literals;
 
 template < typename Type > struct IgnoreEquals {
@@ -66,6 +67,7 @@ template < typename Type > struct IgnoreEquals {
                                                                                \
         /* NOLINTNEXTLINE(hicpp-explicit-conversions)*/                        \
         constexpr enum_name(const m_enumeration& t_val) : m_value(t_val) {}    \
+        constexpr operator underlying() const { return m_value; }              \
                                                                                \
         friend constexpr enum_name operator+(const m_enumeration& t_val);      \
                                                                                \
@@ -99,8 +101,13 @@ template < typename Type > struct IgnoreEquals {
             return *start_name;                                                \
         }                                                                      \
     };                                                                         \
-    constexpr enum_name operator+(const enum_name::m_enumeration& t_val) {                \
+    constexpr enum_name operator+(const enum_name::m_enumeration& t_val) {     \
         return enum_name(t_val);                                               \
     }                                                                          \
+    template <> struct std::hash< enum_name > {                                \
+        size_t operator()(const enum_name& t_enum) const noexcept {            \
+            return std::hash< type >{}(t_enum);                                \
+        }                                                                      \
+    };
 // NOLINTEND(cppcoreguidelines-macro-usage)
 #endif

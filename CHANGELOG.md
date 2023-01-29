@@ -4,10 +4,11 @@
 
 ## New Features
 
-- feat: reflective enums through preprocessor shenanigans. [`671371a`](https://github.com/bwhitchurch/CubeTimer/commit/671371a80af9226e1778da5d8a71b2970a5b6d40)
+- feat: reflective enums through preprocessor shenanigans. [`7d34190`](https://github.com/bwhitchurch/CubeTimer/commit/7d34190747b18cabc922cf4bad7c1ce38c7e5b6a)
 
 ## Miscellaneous
 
+- Change: cube header makes use of enum utils. [`a2d456a`](https://github.com/bwhitchurch/CubeTimer/commit/a2d456a07469672d11545c4e1d312ee4434b995a)
 - Enum things [`8320a5e`](https://github.com/bwhitchurch/CubeTimer/commit/8320a5ee7d8ffa4e60959c8de8ed9dcadecc7703)
 #[0.1.1](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...0.1.1)
 
