@@ -9,12 +9,12 @@ include(Catch)
 catch_discover_tests(
   ppUtilsTest
   TEST_PREFIX
-  "libEnumUtils."
+  "ppUtils."
   REPORTER
   XML
   OUTPUT_DIR
   .
   OUTPUT_PREFIX
-  "libEnumUtils."
+  "ppUtils."
   OUTPUT_SUFFIX
   .xml)

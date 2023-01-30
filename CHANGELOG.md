@@ -9,7 +9,7 @@
 ## Fixes
 
 - Fix: check for constexpr string support [`c1c9cda`](https://github.com/bwhitchurch/CubeTimer/commit/c1c9cdaa66722f1f56c57ed2d08b5dad9bc5418f)
-- Fix: checking constexpr string support (again) [`cb92232`](https://github.com/bwhitchurch/CubeTimer/commit/cb92232cab8b56503f67cd4ef72bd09006984911)
+- Fix: checking constexpr string support (again) [`2c1a04f`](https://github.com/bwhitchurch/CubeTimer/commit/2c1a04f1fab6c3f10914c418750da9827369b543)
 - fix: constexpr string check changed to ifdef [`78bdc18`](https://github.com/bwhitchurch/CubeTimer/commit/78bdc184ab927b76b3fa0bf987f7267765917c52)
 
 ## Miscellaneous
@@ -18,6 +18,7 @@
 - Enum things [`8320a5e`](https://github.com/bwhitchurch/CubeTimer/commit/8320a5ee7d8ffa4e60959c8de8ed9dcadecc7703)
 - Change: Finished reworking scrambler to use new enum and cubeMove classes [`e0edfb1`](https://github.com/bwhitchurch/CubeTimer/commit/e0edfb1b2f518fd5ef3a43b6c988eeb1a40dc062)
 - enum.hpp is dead [`f268ef2`](https://github.com/bwhitchurch/CubeTimer/commit/f268ef27d5541603acb786a228f410548e4e52f0)
+- Fix naming in ppUtils [`b28aa89`](https://github.com/bwhitchurch/CubeTimer/commit/b28aa893081a47afcbcb8a30d1ed7042725ac2f9)
 #[0.1.1](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...0.1.1)
 
 ## New Features
