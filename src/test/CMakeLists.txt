@@ -1,5 +1,3 @@
-find_package(Catch2)
-
 add_executable(scramblerTest scramblerTest.cpp)
 target_link_libraries(scramblerTest PRIVATE scrambler Catch2::Catch2WithMain
                                             project_options project_warnings)
