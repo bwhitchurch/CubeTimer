@@ -8,92 +8,129 @@
  */
 #ifndef CUBE_HPP
 #define CUBE_HPP
-#include <fmt/core.h>  // for format_parse_context, formatter
-#include <stdint.h>    // for uint8_t
-#include <cstddef>     // for size_t
+#include "enumUtils.hpp"
 
-#include "enum.hpp"    // for BiEnum
+#include <cstddef> // for size_t
+#include <exception>
+#include <stdexcept>
+#include <stdint.h> // for uint8_t
+#include <unordered_map>
+#include <unordered_set>
+
+#include <fmt/compile.h> // for format_parse_context, formatter
+#include <fmt/core.h>    // for format_parse_context, formatter
 
 /*!
  * @brief number of faces on a cube.
  */
 constexpr size_t num_cube_faces = 6;
 
-/*!
- * @brief CubeFace enum labels for faces of the cube.
- */
-enum class CubeFace : uint8_t { UP, DOWN, RIGHT, LEFT, FRONT, BACK };
-
-/*!
- * @brief BiEnum for mapping from CubeFace labels to quarter-turn metric
- * notation.
- */
-constexpr BiEnum< CubeFace, char, num_cube_faces > cube_face_notation{
-    {{{CubeFace::UP, 'U'},
-      {CubeFace::DOWN, 'D'},
-      {CubeFace::RIGHT, 'R'},
-      {CubeFace::LEFT, 'L'},
-      {CubeFace::FRONT, 'F'},
-      {CubeFace::BACK, 'B'}}}};
-
-/*!
- * @brief formatter specialization for CubeFace enum class
- */
-template <> struct fmt::formatter< CubeFace > {
-    /*!
-     * @brief parse the format string
-     *
-     * @param ctx the format context.
-     *
-     * @return iterator to one past last parse char of the format string.
-     */
-    static constexpr auto parse(format_parse_context& t_ctx)
-        -> decltype(t_ctx.begin()) {
-        return t_ctx.end();
-    }
-
-    /*!
-     * @brief formats the CubeFace element into a printable character
-     *
-     * @tparam FormatContext
-     * @param face
-     * @param ctx
-     *
-     * @return Format ctx output iterator;
-     */
-    template < typename FormatContext >
-    static auto format(const CubeFace& t_face, FormatContext& t_ctx)
-        -> decltype(t_ctx.out()) {
-        return fmt::format_to(t_ctx.out(), "{}", cube_face_notation[t_face]);
-    }
-};
+BETTER_ENUM(CubeFace, uint8_t, UP, DOWN, RIGHT, LEFT, FRONT, BACK)
 
 /*!
  * @brief Number of different turns that each face can make
  */
 constexpr size_t num_turns = 3;
-/*!
- * @brief FaceTurn an enum class to label the different modes for each face
- * move.
- */
-enum class FaceTurn { ANTICLOCKWISE, CLOCKWISE, HALFTURN };
-/*!
- * @brief BiEnum to map turn modes to their quarter-turn metric notation
- */
-constexpr BiEnum< FaceTurn, char, num_turns > turn_notation{
-    {{{FaceTurn::ANTICLOCKWISE, '\''},
-      {FaceTurn::CLOCKWISE, '\0'},
-      {FaceTurn::HALFTURN, '2'}}}};
 
-/*!
- * @brief Array to map faces to their opposite axis partners.
- */
-constexpr BiEnum< CubeFace, CubeFace, num_cube_faces > cube_face_axis_pair{
-    {{{CubeFace::UP, CubeFace::DOWN},
-      {CubeFace::DOWN, CubeFace::UP},
-      {CubeFace::RIGHT, CubeFace::LEFT},
-      {CubeFace::LEFT, CubeFace::RIGHT},
-      {CubeFace::FRONT, CubeFace::BACK},
-      {CubeFace::BACK, CubeFace::FRONT}}}};
+BETTER_ENUM(FaceTurn, uint8_t, ANTICLOCKWISE, CLOCKWISE, HALFTURN)
 
+constexpr auto makeFirstQuery(const auto& t_first_val) {
+    return [t_first_val](auto t_pair_val) {
+        return t_pair_val.first == t_first_val;
+    };
+}
+
+constexpr auto makeSecondQuery(const auto& t_second_val) {
+    return [t_second_val](auto t_pair_val) {
+        return t_pair_val.second == t_second_val;
+    };
+}
+
+struct CubeMove {
+    constexpr static std::array< std::pair< CubeFace, char >, CubeFace::size() >
+        face_notation{
+            {{CubeFace::UP, 'U'},
+             {CubeFace::DOWN, 'D'},
+             {CubeFace::RIGHT, 'R'},
+             {CubeFace::LEFT, 'L'},
+             {CubeFace::FRONT, 'F'},
+             {CubeFace::BACK, 'B'}}
+    };
+
+    constexpr static std::array< std::pair< FaceTurn, char >, FaceTurn::size() >
+        turn_notation{
+            {{FaceTurn::ANTICLOCKWISE, '\''},
+             {FaceTurn::CLOCKWISE, '\0'},
+             {FaceTurn::HALFTURN, '2'}}
+    };
+
+    constexpr static CubeFace getFace(const char& t_c) {
+        const auto* face_ptr = std::find_if(
+            face_notation.begin(), face_notation.end(), makeSecondQuery(t_c)
+        );
+        if (face_ptr == face_notation.end()) {
+            throw std::invalid_argument(fmt::format(
+                "{} is not recognized notation for a cube face\n", t_c
+            ));
+        }
+        return face_ptr->first;
+    }
+
+    constexpr static FaceTurn getTurn(const char& t_c) {
+        const auto* turn_ptr = std::find_if(
+            turn_notation.begin(), turn_notation.end(), makeSecondQuery(t_c)
+        );
+        if (turn_ptr == turn_notation.end()) {
+            throw std::invalid_argument(fmt::format(
+                "{} is not recognized notation for a face turn\n", t_c
+            ));
+        }
+        return turn_ptr->first;
+    }
+
+    CubeFace face;
+    FaceTurn turn;
+
+    explicit constexpr CubeMove(const CubeFace& t_face, const FaceTurn& t_turn)
+        : face(t_face), turn(t_turn) {}
+
+    explicit constexpr CubeMove(const std::string_view t_notation)
+        : face(getFace(t_notation[0])), turn(getTurn(t_notation[1])) {}
+
+    [[nodiscard]] CUBE_TIMER_CONSTEXPR std::string getNotation() const {
+        const auto* face_ptr = std::find_if(
+            face_notation.begin(), face_notation.end(), makeFirstQuery(face)
+        );
+        const auto* turn_ptr = std::find_if(
+            turn_notation.begin(), turn_notation.end(), makeFirstQuery(turn)
+        );
+
+        return std::string(&(face_ptr->second), 1)
+             + std::string(&(turn_ptr->second), 1);
+    }
+
+    static std::vector< CubeMove > generateMoveList() {
+        std::vector< CubeMove > move_list;
+        move_list.reserve(CubeFace::size() * FaceTurn::size());
+        for (auto face : CubeFace::values()) {
+            for (auto turn : FaceTurn::values()) {
+                move_list.emplace_back(face, turn);
+            }
+        }
+        return move_list;
+    }
+};
+
+template <> struct fmt::formatter< CubeMove > {
+    template < typename ParseCtx > constexpr auto parse(ParseCtx& t_ctx) const {
+        return t_ctx.begin();
+    }
+
+    template < typename FormatCtx >
+    constexpr auto format(const CubeMove& t_move, FormatCtx& t_ctx) const {
+        return format_to(t_ctx.out(), "{}", t_move.getNotation());
+    }
+};
+
+const std::unordered_map< CubeFace, CubeFace >& getAxisPairs();
 #endif
