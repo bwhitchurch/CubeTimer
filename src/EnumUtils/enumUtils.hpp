@@ -4,13 +4,13 @@
 
 #include <algorithm>
 #include <array>
-#include <string_view>
 #include <functional>
+#include <string_view>
 using namespace std::string_view_literals;
-#ifdef __cpp_lib_constexpr_string
-#define CUBE_TIMER_CONSTEXPR constexpr
+#if __cpp_lib_constexpr_string >= 201907L
+    #define CUBE_TIMER_CONSTEXPR constexpr
 #else
-#define CUBE_TIMER_CONSTEXPR
+    #define CUBE_TIMER_CONSTEXPR
 #endif
 
 template < typename Type > struct IgnoreEquals {
