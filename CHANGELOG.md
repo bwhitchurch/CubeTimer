@@ -8,7 +8,8 @@
 
 ## Fixes
 
-- Fix: check for constexpr string support [`0ca7233`](https://github.com/bwhitchurch/CubeTimer/commit/0ca7233df8668e4b7b4aff874934bcf89cd2d74d)
+- Fix: check for constexpr string support [`c1c9cda`](https://github.com/bwhitchurch/CubeTimer/commit/c1c9cdaa66722f1f56c57ed2d08b5dad9bc5418f)
+- fix: constexpr string check changed to ifdef [`ec65832`](https://github.com/bwhitchurch/CubeTimer/commit/ec658327c1195e5e329f7191aabdbb3ec690a997)
 
 ## Miscellaneous
 
