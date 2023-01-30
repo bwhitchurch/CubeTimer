@@ -6,11 +6,15 @@
 
 - feat: reflective enums through preprocessor shenanigans. [`7d34190`](https://github.com/bwhitchurch/CubeTimer/commit/7d34190747b18cabc922cf4bad7c1ce38c7e5b6a)
 
+## Fixes
+
+- Fix: check for constexpr string support [`0ca7233`](https://github.com/bwhitchurch/CubeTimer/commit/0ca7233df8668e4b7b4aff874934bcf89cd2d74d)
+
 ## Miscellaneous
 
 - Change: cube header makes use of enum utils. [`9b0f1a6`](https://github.com/bwhitchurch/CubeTimer/commit/9b0f1a644d1720c5d9cd796d8867fd476183e103)
 - Enum things [`8320a5e`](https://github.com/bwhitchurch/CubeTimer/commit/8320a5ee7d8ffa4e60959c8de8ed9dcadecc7703)
-- Change: Finished reworking scrambler to use new enum and cubeMove classes [`6d0e635`](https://github.com/bwhitchurch/CubeTimer/commit/6d0e6356285ba1b035ebd595113021fc8325caca)
+- Change: Finished reworking scrambler to use new enum and cubeMove classes [`e0edfb1`](https://github.com/bwhitchurch/CubeTimer/commit/e0edfb1b2f518fd5ef3a43b6c988eeb1a40dc062)
 - enum.hpp is dead [`f268ef2`](https://github.com/bwhitchurch/CubeTimer/commit/f268ef27d5541603acb786a228f410548e4e52f0)
 #[0.1.1](https://github.com/bwhitchurch/CubeTimer/compare/0.1.0...0.1.1)
 

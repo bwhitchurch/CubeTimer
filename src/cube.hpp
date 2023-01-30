@@ -97,7 +97,7 @@ struct CubeMove {
     explicit constexpr CubeMove(const std::string_view t_notation)
         : face(getFace(t_notation[0])), turn(getTurn(t_notation[1])) {}
 
-    [[nodiscard]] constexpr std::string getNotation() const {
+    [[nodiscard]] CUBE_TIMER_CONSTEXPR std::string getNotation() const {
         const auto* face_ptr = std::find_if(
             face_notation.begin(), face_notation.end(), makeFirstQuery(face)
         );
@@ -132,5 +132,5 @@ template <> struct fmt::formatter< CubeMove > {
     }
 };
 
-const std::unordered_map< CubeFace, CubeFace >& getAxisPairs(); 
+const std::unordered_map< CubeFace, CubeFace >& getAxisPairs();
 #endif

@@ -7,6 +7,11 @@
 #include <string_view>
 #include <functional>
 using namespace std::string_view_literals;
+#if __cpp_lib_constexpr_string
+#define CUBE_TIMER_CONSTEXPR constexpr
+#else
+#define CUBE_TIMER_CONSTEXPR
+#endif
 
 template < typename Type > struct IgnoreEquals {
     Type value;
