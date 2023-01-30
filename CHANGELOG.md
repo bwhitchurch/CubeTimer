@@ -8,10 +8,11 @@
 
 ## Fixes
 
+- Fix: dummy test in scramblerTest to ensure valid program [`b4b1ec5`](https://github.com/bwhitchurch/CubeTimer/commit/b4b1ec58fc2620da520f6bc95eb0f5b67333afbd)
 - Fix: check for constexpr string support [`c1c9cda`](https://github.com/bwhitchurch/CubeTimer/commit/c1c9cdaa66722f1f56c57ed2d08b5dad9bc5418f)
 - Fix: checking constexpr string support (again) [`2c1a04f`](https://github.com/bwhitchurch/CubeTimer/commit/2c1a04f1fab6c3f10914c418750da9827369b543)
+- Fix: remove findpackage from subdirectory cmakelists [`e388169`](https://github.com/bwhitchurch/CubeTimer/commit/e388169d2ee39cc8a97ad0b35b9fd68975d36475)
 - fix: constexpr string check changed to ifdef [`78bdc18`](https://github.com/bwhitchurch/CubeTimer/commit/78bdc184ab927b76b3fa0bf987f7267765917c52)
-- Fix: remove findpackage from subdirectory cmakelists [`017a4ed`](https://github.com/bwhitchurch/CubeTimer/commit/017a4ed836219ce7752c944308d93b4fef6be80c)
 
 ## Miscellaneous
 
